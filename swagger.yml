@@ -1,0 +1,301 @@
+swagger: "2.0"
+info:
+  description: "todo edit"
+  version: "1.0.0"
+  title: "airtouch challenge"
+  contact:
+    email: "lazugeorgem@gmail.com"
+host: "localhost:3000"
+schemes:
+- http
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+basePath: "/"
+tags:
+- name: "Authentication"
+  description: "Authentication endpoints"
+- name: "User"
+  description: "User endpoints"
+- name: "Project"
+  description: "Board messages"
+- name: "Static resources"
+  description: "media uploaded in the `uploads` folder"
+paths:
+  /register:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Create an account on the message board"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object to be registered on the board."
+        required: true
+        schema:
+          $ref: "#/definitions/RegistrationPOST"
+      responses:
+        201:
+          description: "Registered successfully"
+          headers:
+            Location:
+              type: string
+              description: "The URL of the newly created user"
+          schema:
+            $ref: "#/definitions/TokenResponse"
+        403:
+          description: "Username already taken"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal Server Error"
+  /login:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Login into your account"
+      description: "Authenticate to your account using your username and password. You will receive a JWT that you can use in your future requests to prove your identity."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Your username and password"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginPOST"
+      responses:
+        200:
+          description: "Login successful, JWT received"
+          schema:
+            $ref: "#/definitions/TokenResponse"
+        400:
+          description: "Your request body was malformed"
+        500:
+          description: "Something went wrong in the back"
+  /user/{id}:
+    get:
+      tags:
+      - "User"
+      summary: "Retrieves data about a user"
+      description: "Get all profile data about a user."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The ID of the user you want to see info about"
+        required: true
+        type: "string"
+        format: "ObjectID"
+      responses:
+        200:
+          description: "Request successful, User received"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Your request body was malformed"
+        404:
+          description: "User does not exist"
+        500:
+          description: "Something went wrong in the back"
+      security:
+      - Bearer: []
+  /board:
+    get:
+      tags:
+      - "Project"
+      summary: "Retrieves all messages in the board"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Range"
+        in: "header"
+        description: "Enables pagination and requests one specific page. Page size is 10 items. Example: `page=1`"
+        required: false
+        type: "string"
+        format: "page=n"
+      responses:
+        200:
+          description: "Request successful, board contents received"
+          headers:
+            Content-Range:
+              type: string
+              description: "Tells the current page. Ex. `page n/max`"
+          schema:
+            $ref: "#/definitions/Board"
+        400:
+          description: "Your request body was malformed"
+        416:
+          description: "The page you requested is outside range"
+        404:
+          description: "Project does not exist"
+        500:
+          description: "Something went wrong in the back"
+      security:
+      - Bearer: []
+  /message:
+    post:
+      tags:
+      - "Project"
+      summary: "Add a new message to the board"
+      description: "Add a new message to the board. The message is received in `form-data` format and allows for image upload."
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: formData
+        name: title
+        type: string
+        description: The title of the message
+      - in: formData
+        name: content
+        type: string
+        description: The content of the message
+      - in: formData
+        name: picture
+        type: file
+        description: The image for this message
+      responses:
+        201:
+          description: "Request successful, Project added to the board"
+          headers:
+            Location:
+              type: string
+              description: "The URL of the newly created message"
+        400:
+          description: "Your request was malformed"
+        500:
+          description: "Something went wrong in the back"
+      security:
+      - Bearer: []
+  /message/{id}:
+    get:
+      tags:
+      - "Project"
+      summary: "Retrieves a board message"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of the message to return"
+        required: true
+        type: "string"
+        format: "ObjectID"
+      responses:
+        200:
+          description: "The queried message"
+          schema:
+            $ref: "#/definitions/Project"
+        400:
+          description: "Bad request"
+        404:
+          description: "Project does not exist"
+        500:
+          description: "Internal Server Error"
+      security:
+      - Bearer: []
+  /uploads/{filename}:
+    get:
+      tags:
+      - "Static resources"
+      summary: "Retrieves file uploaded"
+      produces:
+      - "application/png"
+      - "application/jpeg"
+      - "application/jpg"
+      parameters:
+      - name: "filename"
+        in: "path"
+        description: "Retrieves the picture uploaded with a message, by its filename."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "File retrieved successfully"
+          headers:
+            Content-Type:
+              type: string
+              description: "The type of the file received"
+        404:
+          description: "File does not exist"
+        500:
+          description: "Internal Server Error"
+      security:
+      - Bearer: []
+definitions:
+  User:
+    type: "object"
+    properties:
+      _id:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+  Message:
+    type: "object"
+    properties:
+      _id:
+        type: string
+      title:
+        type: string
+      content:
+        type: string
+      picture:
+        type: string
+  Board:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        picture:
+          type: string
+  TokenResponse:
+    type: "object"
+    properties:
+      token:
+        type: string
+  LoginPOST:
+    type: "object"
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+  RegistrationPOST:
+    type: "object"
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string

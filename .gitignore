@@ -1,0 +1,18 @@
+# System files
+.DS_Store
+
+# Node packages
+node_modules/**
+
+# Idea files
+.idea/**
+
+# Build files
+build/**
+
+# Documentation files
+docs/**
+
+# Keys
+**/*.key
+**/*.pem
