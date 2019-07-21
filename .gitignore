@@ -8,11 +8,8 @@ node_modules/**
 .idea/**
 
 # Build files
+
 build/**
 
 # Documentation files
 docs/**
-
-# Keys
-**/*.key
-**/*.pem

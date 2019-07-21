@@ -1,0 +1,21 @@
+local:
+  mongo:
+    connectionUri: mongodb://localhost:27017/airtouch_challenge
+    options:
+      useNewUrlParser: true
+  express:
+    port: 3000
+test:
+  mongo:
+    connectionUri: mongodb://mongo/airtouch_challenge
+    options:
+      useNewUrlParser: true
+  express:
+    port: 3000
+prod:
+  mongo:
+    connectionUri: mongodb://admin:${MONGO_PASSWORD}@your-mongo-provider.com:35653/airtouch_challenge
+    options:
+      useNewUrlParser: true
+  express:
+    port: 80

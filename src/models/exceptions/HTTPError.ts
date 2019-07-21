@@ -1,21 +1,25 @@
 /**
- * Defines a throwable subclass of Error used for signaling an HTTP status code.
+ * @module Exceptions
+ */
+
+/**
+ * Defines a throwable subclass of Error used for signaling an HTTP error code.
  */
 class HTTPError extends Error {
     /**
      * The HTTP status code.
      */
-    readonly statusCode: number;
+    public readonly statusCode: number;
 
     /**
      * The body of the response.
      */
-    readonly body: any;
+    public readonly body: any;
 
     /**
      * The header fields
      */
-    readonly headers: any;
+    public readonly headers: any;
 
     /**
      * Constructor for the HTTPError class

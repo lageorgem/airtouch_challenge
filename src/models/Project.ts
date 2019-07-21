@@ -1,19 +1,36 @@
-import {ObjectId} from 'bson';
-import {prop, Typegoose} from "typegoose";
-import MongooseService from "../services/mongoose/MongooseService";
+/**
+ * @module Project
+ */
 
+import { ObjectId } from "bson";
+import { prop, Typegoose } from "typegoose";
+import MongooseService from "../services/MongooseService";
+import { Model } from "./index";
+
+/**
+ * Object mapping of a Project document
+ */
 export class Project extends Typegoose {
 
-    _id: ObjectId | null = null;
+    public _id: ObjectId | string | null = null;
 
+    /**
+     * [Required] The name of the project.
+     */
     @prop({ required: true })
-    name: string;
+    public name: string;
 
+    /**
+     * [Required] The company maintaining the project
+     */
     @prop({ required: true })
-    company: string;
+    public company: string;
 }
 
-export const ProjectModel = new Project().getModelForClass(Project, {
+/**
+ * Typegoose model for database interaction
+ */
+export const ProjectModel: Model<Project> = new Project().getModelForClass(Project, {
     existingConnection: MongooseService.getInstance().getClient(),
-    schemaOptions: { collection: 'Project', versionKey: false }
+    schemaOptions: { collection: "Projects", versionKey: false }
 });

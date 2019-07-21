@@ -1,0 +1,324 @@
+{
+  "info": {
+    "_postman_id": "4ca26779-6b0b-409a-9d58-b422450f9877",
+    "name": "airtouch_challenge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "http://localhost:3000/register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\": \"glazu\",\n\t\"password\": \"test\",\n\t\"firstName\": \"George Mihai\",\n\t\"lastName\": \"Lazu\",\n\t\"email\": \"lazugeorgem@gmail.com\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "register"
+          ]
+        },
+        "description": "User registration"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\": \"glazu\",\n\t\"password\": \"test\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "login"
+          ]
+        },
+        "description": "User authentication"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/projects",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/projects",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "projects"
+          ]
+        },
+        "description": "See all projects"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/projects",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpYXQiOjE1NjM1NDYzODAsIm5iZiI6MTU2MzU0NjM4MCwiZXhwIjoxNTYzNjMyNzgwLCJhdWQiOiJhaXJ0b3VjaG1lZGlhLmNvbSIsImlzcyI6ImFpcnRvdWNobWVkaWEuY29tIiwic3ViIjoiNWQyZjU4Mzk4NjMxMGYwMDA4ZmM5YjIzIn0.VO4ouXzUaoYru6zMjldvGgIf59xsmbDbvcAVjAGReU0SdeCH424VhrxiAmJxybneN8v-8v7TkaNYdd0Qwx0Ou_hEfdHcERH-z44-w_IKEQx6rNjZqVYizhHT0gEvrgHWOWQk85h-FYEY5YcThVK3m1BmnRWP4BYCXGlTiwXsm4DuLx5z40pFlK1LIj0TSGtNNajJydBuQwv5F-aePi8pb2WqLDGB7mB3r5LRSWM9UouxX5zqlDJtPXw2nv-4YvOei3trepLXeiSo0TvfdgJ6R3FanF1aUnHz4trdi-8lVNx79qRlJbD8J-7rRcaZRVfQ0a4lFh8kdjFcoxWxBjuDrQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"company\": \"Microsoft\",\n\t\"name\": \"TypeScript\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/projects",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "projects"
+          ]
+        },
+        "description": "[Admin] Create a new project"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/users",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpYXQiOjE1NjM1NDYzODAsIm5iZiI6MTU2MzU0NjM4MCwiZXhwIjoxNTYzNjMyNzgwLCJhdWQiOiJhaXJ0b3VjaG1lZGlhLmNvbSIsImlzcyI6ImFpcnRvdWNobWVkaWEuY29tIiwic3ViIjoiNWQyZjU4Mzk4NjMxMGYwMDA4ZmM5YjIzIn0.VO4ouXzUaoYru6zMjldvGgIf59xsmbDbvcAVjAGReU0SdeCH424VhrxiAmJxybneN8v-8v7TkaNYdd0Qwx0Ou_hEfdHcERH-z44-w_IKEQx6rNjZqVYizhHT0gEvrgHWOWQk85h-FYEY5YcThVK3m1BmnRWP4BYCXGlTiwXsm4DuLx5z40pFlK1LIj0TSGtNNajJydBuQwv5F-aePi8pb2WqLDGB7mB3r5LRSWM9UouxX5zqlDJtPXw2nv-4YvOei3trepLXeiSo0TvfdgJ6R3FanF1aUnHz4trdi-8lVNx79qRlJbD8J-7rRcaZRVfQ0a4lFh8kdjFcoxWxBjuDrQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users"
+          ]
+        },
+        "description": "[Admin] See all registered users"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/users/me",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpYXQiOjE1NjM1NDYzODAsIm5iZiI6MTU2MzU0NjM4MCwiZXhwIjoxNTYzNjMyNzgwLCJhdWQiOiJhaXJ0b3VjaG1lZGlhLmNvbSIsImlzcyI6ImFpcnRvdWNobWVkaWEuY29tIiwic3ViIjoiNWQyZjU4Mzk4NjMxMGYwMDA4ZmM5YjIzIn0.VO4ouXzUaoYru6zMjldvGgIf59xsmbDbvcAVjAGReU0SdeCH424VhrxiAmJxybneN8v-8v7TkaNYdd0Qwx0Ou_hEfdHcERH-z44-w_IKEQx6rNjZqVYizhHT0gEvrgHWOWQk85h-FYEY5YcThVK3m1BmnRWP4BYCXGlTiwXsm4DuLx5z40pFlK1LIj0TSGtNNajJydBuQwv5F-aePi8pb2WqLDGB7mB3r5LRSWM9UouxX5zqlDJtPXw2nv-4YvOei3trepLXeiSo0TvfdgJ6R3FanF1aUnHz4trdi-8lVNx79qRlJbD8J-7rRcaZRVfQ0a4lFh8kdjFcoxWxBjuDrQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            ""
+          ]
+        },
+        "description": "See your profile"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/users/{id}",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpYXQiOjE1NjM1NDYzODAsIm5iZiI6MTU2MzU0NjM4MCwiZXhwIjoxNTYzNjMyNzgwLCJhdWQiOiJhaXJ0b3VjaG1lZGlhLmNvbSIsImlzcyI6ImFpcnRvdWNobWVkaWEuY29tIiwic3ViIjoiNWQyZjU4Mzk4NjMxMGYwMDA4ZmM5YjIzIn0.VO4ouXzUaoYru6zMjldvGgIf59xsmbDbvcAVjAGReU0SdeCH424VhrxiAmJxybneN8v-8v7TkaNYdd0Qwx0Ou_hEfdHcERH-z44-w_IKEQx6rNjZqVYizhHT0gEvrgHWOWQk85h-FYEY5YcThVK3m1BmnRWP4BYCXGlTiwXsm4DuLx5z40pFlK1LIj0TSGtNNajJydBuQwv5F-aePi8pb2WqLDGB7mB3r5LRSWM9UouxX5zqlDJtPXw2nv-4YvOei3trepLXeiSo0TvfdgJ6R3FanF1aUnHz4trdi-8lVNx79qRlJbD8J-7rRcaZRVfQ0a4lFh8kdjFcoxWxBjuDrQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/5d31d0275a35e4001f80c172",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "5d31d0275a35e4001f80c172"
+          ]
+        },
+        "description": "[Admin] See a user's profile by id"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/roles/{userId}",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpYXQiOjE1NjM1NDYzODAsIm5iZiI6MTU2MzU0NjM4MCwiZXhwIjoxNTYzNjMyNzgwLCJhdWQiOiJhaXJ0b3VjaG1lZGlhLmNvbSIsImlzcyI6ImFpcnRvdWNobWVkaWEuY29tIiwic3ViIjoiNWQyZjU4Mzk4NjMxMGYwMDA4ZmM5YjIzIn0.VO4ouXzUaoYru6zMjldvGgIf59xsmbDbvcAVjAGReU0SdeCH424VhrxiAmJxybneN8v-8v7TkaNYdd0Qwx0Ou_hEfdHcERH-z44-w_IKEQx6rNjZqVYizhHT0gEvrgHWOWQk85h-FYEY5YcThVK3m1BmnRWP4BYCXGlTiwXsm4DuLx5z40pFlK1LIj0TSGtNNajJydBuQwv5F-aePi8pb2WqLDGB7mB3r5LRSWM9UouxX5zqlDJtPXw2nv-4YvOei3trepLXeiSo0TvfdgJ6R3FanF1aUnHz4trdi-8lVNx79qRlJbD8J-7rRcaZRVfQ0a4lFh8kdjFcoxWxBjuDrQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/roles/5d2f583986310f0008fc9b23",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "roles",
+            "5d2f583986310f0008fc9b23"
+          ]
+        },
+        "description": "[Admin] See a role by its user id"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/roles/{id}",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpYXQiOjE1NjM1NDYzODAsIm5iZiI6MTU2MzU0NjM4MCwiZXhwIjoxNTYzNjMyNzgwLCJhdWQiOiJhaXJ0b3VjaG1lZGlhLmNvbSIsImlzcyI6ImFpcnRvdWNobWVkaWEuY29tIiwic3ViIjoiNWQyZjU4Mzk4NjMxMGYwMDA4ZmM5YjIzIn0.VO4ouXzUaoYru6zMjldvGgIf59xsmbDbvcAVjAGReU0SdeCH424VhrxiAmJxybneN8v-8v7TkaNYdd0Qwx0Ou_hEfdHcERH-z44-w_IKEQx6rNjZqVYizhHT0gEvrgHWOWQk85h-FYEY5YcThVK3m1BmnRWP4BYCXGlTiwXsm4DuLx5z40pFlK1LIj0TSGtNNajJydBuQwv5F-aePi8pb2WqLDGB7mB3r5LRSWM9UouxX5zqlDJtPXw2nv-4YvOei3trepLXeiSo0TvfdgJ6R3FanF1aUnHz4trdi-8lVNx79qRlJbD8J-7rRcaZRVfQ0a4lFh8kdjFcoxWxBjuDrQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"role\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/roles/5d31d0275a35e4001f80c172",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "roles",
+            "5d31d0275a35e4001f80c172"
+          ]
+        },
+        "description": "[Admin] Update a role by its user id"
+      },
+      "response": []
+    }
+  ]
+}

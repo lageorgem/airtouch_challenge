@@ -1,25 +1,34 @@
-import {Request, Response, Router} from "express";
-import {RegistrationService} from "../services/registration/RegistrationService";
-import {ObjectId} from "bson";
+/**
+ * @module Registration
+ */
+
+import { Request, Response, Router } from "express";
+import { RegistrationService } from "../services/RegistrationService";
+import { ObjectId } from "bson";
 import HTTPError from "../models/exceptions/HTTPError";
 import JWTGenerationService from "../services/authentication/JWTGenerationService";
+import { User } from "../models/User";
 
+/**
+ * Instance of the Express Router
+ */
 const router: Router = Router();
 
 /**
  * Route POST /register/
  */
-router.post('/',  (req: Request, res: Response): void => {
-    let payload = req.body;
+router.post("/", (req: Request, res: Response): void => {
+    const payload: User = req.body;
 
     RegistrationService.register(payload)
     .then((id: ObjectId) => {
-        const token = JWTGenerationService.generate(id.toHexString());
-
-        res.status(201)
-        .header("Location", `${req.protocol}://${req.get('host')}/user/${id.toHexString()}`)
-        .send({
-            token: token
+        return JWTGenerationService.generate(id.toHexString())
+        .then((token: string) => {
+            res.status(201)
+            .header("Location", `users/${id.toHexString()}`)
+            .send({
+                token: token
+            });
         });
     })
     .catch((e: HTTPError) => {

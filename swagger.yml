@@ -1,13 +1,13 @@
 swagger: "2.0"
 info:
-  description: "todo edit"
+  description: "Small project management API built for an interview tech challenge."
   version: "1.0.0"
   title: "airtouch challenge"
   contact:
     email: "lazugeorgem@gmail.com"
 host: "localhost:3000"
 schemes:
-- http
+  - http
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -15,32 +15,32 @@ securityDefinitions:
     in: header
 basePath: "/"
 tags:
-- name: "Authentication"
-  description: "Authentication endpoints"
-- name: "User"
-  description: "User endpoints"
-- name: "Project"
-  description: "Board messages"
-- name: "Static resources"
-  description: "media uploaded in the `uploads` folder"
+  - name: "Authentication"
+    description: "Authentication endpoints"
+  - name: "User"
+    description: "User endpoints"
+  - name: "Project"
+    description: "Project endpoints"
+  - name: "Role"
+    description: "Role endpoints"
 paths:
   /register:
     post:
       tags:
-      - "Authentication"
-      summary: "Create an account on the message board"
+        - "Authentication"
+      summary: "Create an account"
       description: ""
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "User object to be registered on the board."
-        required: true
-        schema:
-          $ref: "#/definitions/RegistrationPOST"
+        - in: "body"
+          name: "body"
+          description: "User object to be registered on the board."
+          required: true
+          schema:
+            $ref: "#/definitions/RegistrationRequest"
       responses:
         201:
           description: "Registered successfully"
@@ -49,54 +49,75 @@ paths:
               type: string
               description: "The URL of the newly created user"
           schema:
-            $ref: "#/definitions/TokenResponse"
+            $ref: "#/definitions/AuthenticationResponse"
+        400:
+          description: "Your request body was malformed"
         403:
           description: "Username already taken"
-        400:
-          description: "Bad request"
         500:
-          description: "Internal Server Error"
+          description: "An unknown error occured while processing your request"
   /login:
     post:
       tags:
-      - "Authentication"
+        - "Authentication"
       summary: "Login into your account"
       description: "Authenticate to your account using your username and password. You will receive a JWT that you can use in your future requests to prove your identity."
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Your username and password"
-        required: true
-        schema:
-          $ref: "#/definitions/LoginPOST"
+        - in: "body"
+          name: "body"
+          description: "Your username and password"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
       responses:
         200:
           description: "Login successful, JWT received"
           schema:
-            $ref: "#/definitions/TokenResponse"
+            $ref: "#/definitions/LoginResponse"
         400:
           description: "Your request body was malformed"
         500:
-          description: "Something went wrong in the back"
-  /user/{id}:
+          description: "An unknown error occured while processing your request"
+  /users/me:
     get:
       tags:
-      - "User"
-      summary: "Retrieves data about a user"
+        - "User"
+      summary: "Retrieves data about you"
+      description: "Get all profile data about you."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Request successful, User received"
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: "You do not have the required privileges to view this resource"
+        400:
+          description: "Your request body was malformed"
+        500:
+          description: "An unknown error occured while processing your request"
+      security:
+        - Bearer: []
+  /users/{id}:
+    get:
+      tags:
+        - "User"
+      summary: "[Admin] Retrieves data about a user"
       description: "Get all profile data about a user."
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "The ID of the user you want to see info about"
-        required: true
-        type: "string"
-        format: "ObjectID"
+        - name: "id"
+          in: "path"
+          description: "The ID of the user you want to see info about"
+          required: true
+          type: "string"
+          format: "ObjectID"
       responses:
         200:
           description: "Request successful, User received"
@@ -104,136 +125,169 @@ paths:
             $ref: "#/definitions/User"
         400:
           description: "Your request body was malformed"
+        401:
+          description: "You do not have the required privileges to view this resource"
         404:
           description: "User does not exist"
         500:
-          description: "Something went wrong in the back"
+          description: "An unknown error occured while processing your request"
       security:
-      - Bearer: []
-  /board:
+        - Bearer: []
+  /users:
     get:
       tags:
-      - "Project"
-      summary: "Retrieves all messages in the board"
+        - "User"
+      summary: "[Admin] Retrieves all registered users"
+      description: "Get profile data about all registered user."
       produces:
-      - "application/json"
-      parameters:
-      - name: "Range"
-        in: "header"
-        description: "Enables pagination and requests one specific page. Page size is 10 items. Example: `page=1`"
-        required: false
-        type: "string"
-        format: "page=n"
+        - "application/json"
       responses:
         200:
-          description: "Request successful, board contents received"
-          headers:
-            Content-Range:
-              type: string
-              description: "Tells the current page. Ex. `page n/max`"
+          description: "Request successful, User received"
           schema:
-            $ref: "#/definitions/Board"
+            $ref: "#/definitions/User"
         400:
           description: "Your request body was malformed"
-        416:
-          description: "The page you requested is outside range"
+        401:
+          description: "You do not have the required privileges to view this resource"
         404:
-          description: "Project does not exist"
+          description: "User does not exist"
         500:
-          description: "Something went wrong in the back"
+          description: "An unknown error occured while processing your request"
       security:
-      - Bearer: []
-  /message:
+        - Bearer: []
+  /projects:
+    get:
+      tags:
+        - "Project"
+      summary: "Retrieves all existing projects"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Request successful, projects received"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Project'
+        400:
+          description: "Your request body was malformed"
+        404:
+          description: "No projects exist"
+        500:
+          description: "An unknown error occured while processing your request"
     post:
       tags:
-      - "Project"
-      summary: "Add a new message to the board"
-      description: "Add a new message to the board. The message is received in `form-data` format and allows for image upload."
-      consumes:
-      - "multipart/form-data"
+        - "Project"
+      summary: "[Admin] Create a new project"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: formData
-        name: title
-        type: string
-        description: The title of the message
-      - in: formData
-        name: content
-        type: string
-        description: The content of the message
-      - in: formData
-        name: picture
-        type: file
-        description: The image for this message
+        - in: "body"
+          name: "body"
+          description: "User object to be registered on the board."
+          required: true
+          schema:
+            $ref: "#/definitions/Project"
       responses:
         201:
-          description: "Request successful, Project added to the board"
+          description: "Request successful, project created"
+        401:
+          description: "You do not have the required privileges to view this resource"
+        400:
+          description: "Your request body was malformed"
+        500:
+          description: "An unknown error occured while processing your request"
+      security:
+        - Bearer: []
+  /roles:
+    post:
+      tags:
+        - "Role"
+      summary: "[Admin] Create a new authorization role"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Role object"
+          required: true
+          schema:
+            $ref: "#/definitions/Role"
+      responses:
+        201:
+          description: "Request successful, project created"
           headers:
             Location:
               type: string
-              description: "The URL of the newly created message"
+              description: "The URL of the newly created role"
         400:
-          description: "Your request was malformed"
+          description: "Your request body was malformed"
+        401:
+          description: "You do not have the required privileges to view this resource"
         500:
-          description: "Something went wrong in the back"
+          description: "An unknown error occured while processing your request"
       security:
-      - Bearer: []
-  /message/{id}:
+        - Bearer: []
+  /roles/{id}:
     get:
       tags:
-      - "Project"
-      summary: "Retrieves a board message"
+        - "Role"
+      summary: "[Admin] Retrieves an authorization role"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "ID of the message to return"
-        required: true
-        type: "string"
-        format: "ObjectID"
+        - name: "id"
+          in: "path"
+          description: "The ID of the user you want to see info about"
+          required: true
+          type: "string"
+          format: "ObjectID"
       responses:
         200:
-          description: "The queried message"
+          description: "Request successful, role updated"
           schema:
-            $ref: "#/definitions/Project"
+            $ref: "#/definitions/Role"
         400:
-          description: "Bad request"
-        404:
-          description: "Project does not exist"
+          description: "Your request body was malformed"
+        401:
+          description: "You do not have the required privileges to view this resource"
         500:
-          description: "Internal Server Error"
+          description: "An unknown error occured while processing your request"
       security:
-      - Bearer: []
-  /uploads/{filename}:
-    get:
+        - Bearer: []
+    put:
       tags:
-      - "Static resources"
-      summary: "Retrieves file uploaded"
+        - "Role"
+      summary: "[Admin] Modify an existing authorization role"
       produces:
-      - "application/png"
-      - "application/jpeg"
-      - "application/jpg"
+        - "application/json"
       parameters:
-      - name: "filename"
-        in: "path"
-        description: "Retrieves the picture uploaded with a message, by its filename."
-        required: true
-        type: "string"
+        - name: "id"
+          in: "path"
+          description: "The ID of the user for which you want to modify role."
+          required: true
+          type: "string"
+          format: "ObjectID"
+        - in: "body"
+          name: "body"
+          description: "Role object"
+          required: true
+          schema:
+            $ref: "#/definitions/Role"
       responses:
         200:
-          description: "File retrieved successfully"
-          headers:
-            Content-Type:
-              type: string
-              description: "The type of the file received"
-        404:
-          description: "File does not exist"
+          description: "Request successful, role updated"
+          schema:
+            $ref: "#/definitions/Role"
+        400:
+          description: "Your request body was malformed"
+        401:
+          description: "You do not have the required privileges to view this resource"
         500:
-          description: "Internal Server Error"
+          description: "An unknown error occured while processing your request"
       security:
-      - Bearer: []
+        - Bearer: []
 definitions:
   User:
     type: "object"
@@ -242,51 +296,44 @@ definitions:
         type: string
       username:
         type: string
-      password:
-        type: string
       firstName:
         type: string
       lastName:
         type: string
       email:
         type: string
-  Message:
+  Project:
     type: "object"
     properties:
       _id:
         type: string
-      title:
+      name:
         type: string
-      content:
+      company:
         type: string
-      picture:
-        type: string
-  Board:
-    type: "array"
-    items:
-      type: "object"
-      properties:
-        _id:
-          type: string
-        title:
-          type: string
-        content:
-          type: string
-        picture:
-          type: string
-  TokenResponse:
+  Role:
     type: "object"
     properties:
-      token:
+      _id:
         type: string
-  LoginPOST:
+      userId:
+        type: string
+      role:
+        type: number
+        enum: [0, 1]
+  LoginRequest:
     type: "object"
     properties:
       username:
         type: string
       password:
         type: string
-  RegistrationPOST:
+  AuthenticationResponse:
+    type: "object"
+    properties:
+      token:
+        type: string
+  RegistrationRequest:
     type: "object"
     properties:
       username:

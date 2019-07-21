@@ -1,57 +1,106 @@
-// @ts-ignore
+/**
+ * @module Configuration
+ */
+
 import * as yml from "node-yaml";
 
+/**
+ * Representation of mongodb configuration
+ */
 interface IMongoConfig {
+    /**
+     * MongoDB connection URI
+     */
     connectionUri: string;
+    /**
+     * Mongoose options
+     */
     options: {
         useNewUrlParser: boolean;
         useCreateIndex: boolean;
     };
 }
 
+/**
+ * Representation of express configuration
+ */
 interface IExpressConfig {
+    /**
+     * The port your server will run on
+     */
     port: number;
 }
 
+/**
+ * Representation of environment configuration
+ */
 interface IEnvConfig {
+    /**
+     * Mongoose configuration object
+     */
     mongo: IMongoConfig;
+    /**
+     * Express configuration object
+     */
     express: IExpressConfig;
 }
 
+/**
+ * Representation of configuration file
+ */
 interface IConfig {
+    /**
+     * Environment-specific configuration object
+     */
     [env: string]: IEnvConfig;
 }
 
+/**
+ * Singleton class for retrieving project configuration.
+ * The environment variable `NODE_ENV` must be set to a value corresponding to a top-level configuration attribute,
+ * The configuration file can be found under src/configuration/configuration.yml
+ */
 class Configuration {
 
+    /**
+     * Unique instance of the Configuration class
+     */
     private static instance: Configuration;
+    /**
+     * The configuration object
+     */
     private readonly config: IEnvConfig;
 
     private constructor(configPath: string) {
         const env: string | undefined = process.env.NODE_ENV;
+        const config: IConfig = this.insertEnv(yml.readSync(configPath));
 
         if (!env) {
             throw new Error("NODE_ENV not set");
         }
 
-        this.config = this.insertEnv(yml.readSync(configPath))[env];
+        if (!config[env]) {
+            throw new Error(`No configuration found for the ${env} environment`);
+        }
+
+        this.config = config[env];
     }
 
     /**
-     * Retrieves the singleton instance of Configuration
-     * @returns Configuration
+     * Retrieves the unique instance of Configuration
+     * @returns [[Configuration]]
      */
     public static getInstance(): Configuration {
         if (!this.instance) {
-            this.instance = new Configuration("../../config/config.yml");
+            this.instance = new Configuration("../../configuration/configuration.yml");
         }
 
         return Configuration.instance;
     }
 
     /**
-     * Retrieves the entire configuration
-     * @returns IEnvConfig
+     * Retrieves the configuration for the current environment
+     * @returns [[IEnvConfig]]
      */
     public getConfig(): IEnvConfig {
         return this.config;
@@ -59,7 +108,7 @@ class Configuration {
 
     /**
      * Retrieves the MongoDB configuration
-     * @returns IInvokeConfig
+     * @returns [[IMongoConfig]]
      */
     public getMongoConfig(): IMongoConfig {
         if (!this.config.mongo) {
@@ -71,7 +120,7 @@ class Configuration {
 
     /**
      * Retrieves the Express configuration
-     * @returns IExpressConfig
+     * @returns [[IExpressConfig]]
      */
     public getExpressConfig(): IExpressConfig {
         if (!this.config.express) {
@@ -83,7 +132,11 @@ class Configuration {
 
     /**
      * Inserts environment variables into the config
+     * Example:
+     * `${NODE_ENV}` will be replaced with the value of the `NODE_ENV` environment variable
+     * `${NODE_ENV:local}` will default to `local` if the NODE_ENV variable is not set
      * @param config - the configuration read from the file
+     * @returns [[IConfig]]
      */
     private insertEnv(config: IConfig): IConfig {
         // Replace environment variable references
