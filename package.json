@@ -13,7 +13,7 @@
     "generate-docs": "./node_modules/typedoc/bin/typedoc --exclude src/utils/** --readme ./README.md --out docs/ src/ && node ./node_modules/swagger-to-static/index.js swagger.yml docs/swagger"
   },
   "dependencies": {
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "bson": "^3.0.2",
     "compression": "^1.7.3",
